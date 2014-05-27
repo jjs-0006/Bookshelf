@@ -60,6 +60,7 @@ public class Update extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         sql = "UPDATE BOOKSHELF SET ";
+        flag = 0;
         check("title", request);
         check("isbn", request);
         check("author", request);
@@ -80,7 +81,6 @@ public class Update extends HttpServlet {
     }
 
     private void check(String param, HttpServletRequest request) {
-
         if (request.getParameter(param + "c") != null) {
             if (flag == 1) {
                 sql += ",";
