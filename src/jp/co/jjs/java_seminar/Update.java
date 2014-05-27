@@ -17,12 +17,15 @@ import javax.sql.DataSource;
 /**
  * Servlet implementation class Update
  */
-@WebServlet("/Update")
+@WebServlet("/update")
 public class Update extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Resource(name = "jdbc/crud")
     private DataSource ds;
+    private int flag = 0;
+    private String sql;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -31,63 +34,42 @@ public class Update extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	    process(request,response);
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        process(request, response);
 
-	}
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	    process(request,response);
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        process(request, response);
+    }
 
     private void process(HttpServletRequest request,
-            HttpServletResponse response)throws ServletException, IOException{
-        int count = 0;
-        String result = "";
+            HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String sql = "UPDATE BOOKSHELF SET ";
-        int flag = 0;
-        if(request.getParameter("titlec").equals("1")){
-            sql += "TITLE='" + request.getParameter("title") + "' ";
-            flag = 1;
-        }
-        if(request.getParameter("isbnc").equals("1")){
-            if(flag == 1){
-                sql += ",";
-            }
-            sql += "ISBN='" + request.getParameter("isbn") + "' ";
-            flag = 1;
-        }
-        if(request.getParameter("authorc").equals("1")){
-            if(flag == 1){
-                sql += ",";
-            }
-            sql += "AUTHOR='" + request.getParameter("author") + "' ";
-            flag = 1;
-        }
-        if(request.getParameter("publisherc").equals("1")){
-            if(flag == 1){
-                sql += ",";
-            }
-            sql += "PUBLISHER='" + request.getParameter("publisher") + "' ";
-            flag = 1;
-        }
-
-        int price = Integer.parseInt(request.getParameter("price"));
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/complete.jsp");
-
+        sql = "UPDATE BOOKSHELF SET ";
+        check("title", request);
+        check("isbn", request);
+        check("author", request);
+        check("publisher", request);
+        check("price", request);
+        sql += " WHERE TITLE='" + request.getParameter("oldtitle") + "'";
+        RequestDispatcher dispatcher = request
+                .getRequestDispatcher("WEB-INF/jsp/complete.jsp");
         try (Connection con = ds.getConnection();
-                PreparedStatement ps = con
-                        .prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.execute();
 
         } catch (SQLException e) {
@@ -95,6 +77,21 @@ public class Update extends HttpServlet {
             e.printStackTrace();
         }
         dispatcher.forward(request, response);
+    }
+
+    private void check(String param, HttpServletRequest request) {
+
+        if (request.getParameter(param + "c") != null) {
+            if (flag == 1) {
+                sql += ",";
+            }
+            if (param.equals("price")) {
+                sql += param.toUpperCase() + "=" + request.getParameter(param);
+            } else {
+                sql += param.toUpperCase() + "='" + request.getParameter(param) + "'";
+            }
+            flag = 1;
+        }
     }
 
 }

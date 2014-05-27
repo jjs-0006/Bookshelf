@@ -10,11 +10,11 @@
 <form action="update" method="post">
 元のタイトル:<input type="text" name="oldtitle"/><br><br>
 編集する項目をチェック<br>
-<input type="checkbox" name="titlec" value="1"/><input type="text" name="title"/><br>
-<input type="checkbox" name="isbnc" value="1"/><input type="text" name="isbn"/><br>
-<input type="checkbox" name="authorc" value="1"/><input type="text" name="author"/><br>
-<input type="checkbox" name="publisherc" value="1"/><input type="text" name="publisher"/><br>
-<input type="checkbox" name="pricec" value="1"/><input type="text" name="price"/><br>
+<input type="checkbox" name="titlec" value="1"/>タイトル<input type="text" name="title"/><br>
+<input type="checkbox" name="isbnc" value="1"/>ISBN<input type="text" name="isbn"/><br>
+<input type="checkbox" name="authorc" value="1"/>著者<input type="text" name="author"/><br>
+<input type="checkbox" name="publisherc" value="1"/>出版社<input type="text" name="publisher"/><br>
+<input type="checkbox" name="pricec" value="1"/>価格<input type="text" name="price"/><br>
 <input type="submit" value="編集"/>
 </form>
 </body>
